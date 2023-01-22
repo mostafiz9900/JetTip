@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InputField(
+fun  InputField(
     modifier: Modifier=Modifier,
     valueState: MutableState<String>,
     labelId:String,
@@ -40,7 +40,7 @@ fun InputField(
             Icon(imageVector = Icons.Rounded.AttachMoney,
             contentDescription ="Money Icon" ) },
         singleLine = isSingleLine,
-        textStyle = TextStyle(fontSize = 18.sp, background = MaterialTheme.colorScheme.onBackground),
+        textStyle = TextStyle(fontSize = 18.sp, background = MaterialTheme.colorScheme.surface),
         enabled=enabled,
         keyboardOptions =   KeyboardOptions(keyboardType =keyBoardType, imeAction = imeAction),
         keyboardActions = onAction

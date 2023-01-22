@@ -1,6 +1,7 @@
 package com.example.jettip
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -10,6 +11,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,6 +35,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.jettip.components.InputField
 import com.example.jettip.ui.theme.JetTipTheme
+import com.example.jettip.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,11 +91,16 @@ fun  TopHeader(totalPerPerson:Double=0.0){
         
     }
 }
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Preview
 @Composable
 fun MainContent(){
+    BillFrom(){
+        Log.d("","Amount $it")
+
+    }
+}
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun BillFrom(modifier: Modifier=Modifier,onValChange:(String)-> Unit={} ){
     val totalBillState= remember {
         mutableStateOf("")
     }
@@ -104,7 +115,9 @@ totalBillState.value.trim().isNotEmpty()
         border = BorderStroke(width = 2.dp, color = Color.LightGray)
 
     ) {
-       Column() {
+       Column(modifier=Modifier.padding(6.dp), verticalArrangement = Arrangement.Top,
+       horizontalAlignment = Alignment.Start
+           ) {
            InputField(
                valueState = totalBillState,
                labelId ="Enter Bill" ,
@@ -112,9 +125,48 @@ totalBillState.value.trim().isNotEmpty()
                isSingleLine =true,
                onAction = KeyboardActions{
                    if(!validState) return@KeyboardActions
+                   onValChange(totalBillState.value.trim())
                    keyboardController?.hide()
                }
            )
+           if (validState){
+              Row(
+                  modifier=Modifier.padding(3.dp),
+              horizontalArrangement = Arrangement.Start
+                  ) {
+                  Text(text = "Split",modifier=Modifier.align(alignment = Alignment.CenterVertically))
+              Spacer(modifier = Modifier.width(120.dp))
+                    Row(modifier = Modifier.padding(horizontal = 3.dp),
+                    horizontalArrangement = Arrangement.End
+                        ) {
+                        RoundIconButton(
+                            imageVector = Icons.Default.Remove,
+                            onClick = {
+
+                            },
+
+
+                        )
+                        Text(text = "!")
+                        RoundIconButton(
+                            imageVector = Icons.Default.Add,
+                            onClick = {
+
+                            },
+
+
+                            )
+
+
+
+                    }
+              }
+           }else{
+               Box() {
+                   
+               }
+           }
+           
        }
 
 
