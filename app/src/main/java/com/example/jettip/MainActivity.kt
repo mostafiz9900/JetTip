@@ -14,10 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.CardElevation
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +66,8 @@ fun MyApp(content: @Composable () -> Unit){
 fun  TopHeader(totalPerPerson:Double=0.0){
     Surface(modifier = Modifier
         .fillMaxWidth()
-        .height(150.dp)
+        .padding(10.dp)
+        .height(160.dp)
         .clip(shape = CircleShape.copy(all = CornerSize(10.dp))),
         color = Color(0xFFE9D7F7)
 
@@ -91,13 +89,22 @@ fun  TopHeader(totalPerPerson:Double=0.0){
         
     }
 }
+
 @Composable
 fun MainContent(){
-    BillFrom(){
-        Log.d("","Amount $it")
+    Column(
+        modifier = Modifier.padding(10.dp)
+    ) {
+        TopHeader()
+        Spacer(modifier = Modifier.height(10.dp))
+        BillFrom(){
+            Log.d("","Amount $it")
 
+        }
     }
+
 }
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BillFrom(modifier: Modifier=Modifier,onValChange:(String)-> Unit={} ){
@@ -107,7 +114,12 @@ fun BillFrom(modifier: Modifier=Modifier,onValChange:(String)-> Unit={} ){
     val validState= remember( totalBillState.value) {
 totalBillState.value.trim().isNotEmpty()
     }
+    val sliderPositionValue= remember {
+        mutableStateOf(0f)
+    }
     val keyboardController=LocalSoftwareKeyboardController.current
+
+
     Surface(modifier = Modifier
         .padding(all = 2.dp)
         .fillMaxWidth(),
@@ -115,9 +127,12 @@ totalBillState.value.trim().isNotEmpty()
         border = BorderStroke(width = 2.dp, color = Color.LightGray)
 
     ) {
-       Column(modifier=Modifier.padding(6.dp), verticalArrangement = Arrangement.Top,
-       horizontalAlignment = Alignment.Start
+       Column(
+           modifier=Modifier.padding(6.dp),
+           verticalArrangement = Arrangement.Top,
+           horizontalAlignment = Alignment.Start
            ) {
+
            InputField(
                valueState = totalBillState,
                labelId ="Enter Bill" ,
@@ -131,15 +146,19 @@ totalBillState.value.trim().isNotEmpty()
            )
            if (validState){
               Row(
-                  modifier=Modifier.padding(3.dp),
-              horizontalArrangement = Arrangement.Start
+                  modifier= Modifier
+                      .padding(3.dp)
+                      .fillMaxWidth(),
+                  horizontalArrangement = Arrangement.SpaceBetween
                   ) {
                   Text(text = "Split",modifier=Modifier.align(alignment = Alignment.CenterVertically))
-              Spacer(modifier = Modifier.width(120.dp))
+//              Spacer(modifier = Modifier.fillMaxWidth( fraction = 0.66f))
                     Row(modifier = Modifier.padding(horizontal = 3.dp),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
                         ) {
                         RoundIconButton(
+
                             imageVector = Icons.Default.Remove,
                             onClick = {
 
@@ -147,7 +166,7 @@ totalBillState.value.trim().isNotEmpty()
 
 
                         )
-                        Text(text = "!")
+                        Text(text = "1")
                         RoundIconButton(
                             imageVector = Icons.Default.Add,
                             onClick = {
@@ -165,8 +184,34 @@ totalBillState.value.trim().isNotEmpty()
                Box() {
                    
                }
+
            }
-           
+           Row(
+               modifier = Modifier
+                   .padding(3.dp)
+                   .fillMaxWidth(),
+               horizontalArrangement = Arrangement.SpaceBetween
+           ){
+               Text(text = "Trip:")
+               Text(text = "%9909:")
+           }
+           Column(
+               verticalArrangement = Arrangement.Center,
+               horizontalAlignment = Alignment.CenterHorizontally
+           ) {
+               Text(text = "%33")
+               Spacer(modifier = Modifier.height(20.dp))
+               Slider(value = sliderPositionValue.value, onValueChange = {
+                   sliderPositionValue.value=it
+               },
+
+                   modifier=Modifier.padding(horizontal = 16.dp),
+                   steps = 5,
+                   onValueChangeFinished = {
+
+                   }
+                   )
+           }
        }
 
 
@@ -182,7 +227,7 @@ fun DefaultPreview() {
     JetTipTheme {
         MyApp{
 
-
+            MainContent()
         }
     }
 }

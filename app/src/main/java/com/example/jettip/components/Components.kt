@@ -1,5 +1,6 @@
 package com.example.jettip.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -29,6 +30,7 @@ fun  InputField(
     onAction:KeyboardActions=KeyboardActions.Default
 ){
     OutlinedTextField(
+        modifier=Modifier.fillMaxWidth(),
         value = valueState.value,
         onValueChange = {
         valueState.value=it
